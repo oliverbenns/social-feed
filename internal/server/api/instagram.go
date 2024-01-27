@@ -269,7 +269,7 @@ func (s *Service) GetInstagramFeed(c *gin.Context) {
 	}
 
 	c.PureJSON(200, gin.H{
-		"status": media[:12],
+		"data": media[:12],
 	})
 }
 
