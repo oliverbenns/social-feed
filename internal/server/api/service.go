@@ -18,6 +18,7 @@ type Service struct {
 	InstagramAppID  string
 	InstagramSecret string
 	AppURL          string
+	ApiKey          string
 }
 
 func (s *Service) Run(ctx context.Context) error {
@@ -29,6 +30,8 @@ func (s *Service) Run(ctx context.Context) error {
 	config.AllowAllOrigins = true
 
 	router.Use(cors.New(config))
+	router.Use(gin.Logger())
+	router.Use(s.middleware)
 
 	router.GET("/", s.GetHome)
 
@@ -43,6 +46,22 @@ func (s *Service) Run(ctx context.Context) error {
 	router.Run(addr)
 
 	return nil
+}
+
+func (s *Service) middleware(c *gin.Context) {
+	// IG don't forward back query params
+	if c.Request.URL.Path == "/instagram/auth/callback" {
+		c.Next()
+		return
+	}
+
+	apiKey := c.Query("api_key")
+	if apiKey != s.ApiKey {
+		c.AbortWithStatus(401)
+		return
+	}
+
+	c.Next()
 }
 
 func (s *Service) GetHome(c *gin.Context) {

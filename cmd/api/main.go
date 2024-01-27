@@ -42,6 +42,11 @@ func run() error {
 		return fmt.Errorf("APP_URL not set")
 	}
 
+	apiKey := os.Getenv("API_KEY")
+	if apiKey == "" {
+		return fmt.Errorf("API_KEY not set")
+	}
+
 	svc := api.Service{
 		Port:            8080,
 		RedisClient:     redisClient,
@@ -49,6 +54,7 @@ func run() error {
 		InstagramAppID:  instagramAppID,
 		InstagramSecret: instagramSecret,
 		AppURL:          appURL,
+		ApiKey:          apiKey,
 	}
 
 	err = svc.Run(ctx)

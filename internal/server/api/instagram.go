@@ -107,8 +107,14 @@ func (s *Service) GetInstagramAuthCallback(c *gin.Context) {
 		return
 	}
 
-	feedURL := fmt.Sprintf("/instagram/feed/%s", credential.UserName)
-	c.Redirect(302, feedURL)
+	// Could be exposing here but this is just a demo.
+	feedUrlStr := fmt.Sprintf("/instagram/feed/%s", credential.UserName)
+	feedURL, _ := url.Parse(feedUrlStr)
+	q := url.Values{}
+	q.Set("api_key", s.ApiKey)
+	feedURL.RawQuery = q.Encode()
+
+	c.Redirect(302, feedURL.String())
 }
 
 type ShortLivedToken struct {
