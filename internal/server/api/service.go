@@ -102,6 +102,8 @@ func (s *Service) GetHome(c *gin.Context) {
 				<hr />
 				<h4>Connected Instagram accounts:</h4>
 				%s
+				<hr />
+				<a href="https://github.com/oliverbenns/social-feed" target="_blank">Source code</a>
 			</body>
 		</html>
 	`, authUrl, usernameList)

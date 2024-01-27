@@ -15,7 +15,7 @@ deploy: push
 	  --region ${REGION} \
 	  --project=${PROJECT_ID} \
 	  --allow-unauthenticated \
-	  --set-env-vars REDIS_URL=${REDIS_URL},GIN_MODE=${GIN_MODE},INSTAGRAM_APP_ID=${INSTAGRAM_APP_ID},INSTAGRAM_SECRET=${INSTAGRAM_SECRET},APP_URL=${APP_URL}
+	  --set-env-vars REDIS_URL=${REDIS_URL},GIN_MODE=${GIN_MODE},INSTAGRAM_APP_ID=${INSTAGRAM_APP_ID},INSTAGRAM_SECRET=${INSTAGRAM_SECRET},APP_URL=${APP_URL},API_KEY=${API_KEY}
 
 run: build
 	docker run -p 8080:8080 \
