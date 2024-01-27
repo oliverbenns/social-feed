@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"net/url"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -80,7 +81,12 @@ func (s *Service) GetHome(c *gin.Context) {
 
 	usernameList := "<ul>"
 	for _, username := range usernames {
-		usernameList += fmt.Sprintf("<li><a href=\"/instagram/feed/%s\" target=\"_blank\">%s</a></li>", username, username)
+		feedURLStr := fmt.Sprintf("/instagram/feed/%s", username)
+		feedURL, _ := url.Parse(feedURLStr)
+		q := url.Values{}
+		q.Set("api_key", s.ApiKey)
+		feedURL.RawQuery = q.Encode()
+		usernameList += fmt.Sprintf("<li><a href=\"%s\" target=\"_blank\">%s</a></li>", feedURL, username)
 	}
 	usernameList += "</ul>"
 
