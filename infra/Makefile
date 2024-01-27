@@ -23,6 +23,6 @@ run: build
 	  -e GIN_MODE=release \
 	  -e INSTAGRAM_APP_ID=${INSTAGRAM_APP_ID} \
 	  -e INSTAGRAM_SECRET=${INSTAGRAM_SECRET} \
-	  -e APP_URL=${INSTAGRAM_APP_ID} \
+	  -e APP_URL=${APP_URL} \
 	  ${IMAGE_TAG}
 
