@@ -11,29 +11,52 @@ import (
 )
 
 func main() {
+	err := run()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
+		os.Exit(1)
+	}
+}
+
+func run() error {
 	ctx := context.Background()
 	logger := slog.New(slog.NewJSONHandler(os.Stderr, nil))
 
 	redisClient, err := createRedisClient(ctx)
 	if err != nil {
-		logger.Error("error connecting to redis", "error", err)
-		os.Exit(1)
+		return fmt.Errorf("error connecting to redis: %w", err)
+	}
+
+	instagramAppID := os.Getenv("INSTAGRAM_APP_ID")
+	if instagramAppID == "" {
+		return fmt.Errorf("INSTAGRAM_APP_ID not set")
+	}
+
+	instagramSecret := os.Getenv("INSTAGRAM_SECRET")
+	if instagramSecret == "" {
+		return fmt.Errorf("INSTAGRAM_SECRET not set")
+	}
+
+	appURL := os.Getenv("APP_URL")
+	if appURL == "" {
+		return fmt.Errorf("APP_URL not set")
 	}
 
 	svc := api.Service{
 		Port:            8080,
 		RedisClient:     redisClient,
 		Logger:          logger,
-		InstagramAppID:  os.Getenv("INSTAGRAM_APP_ID"),
-		InstagramSecret: os.Getenv("INSTAGRAM_SECRET"),
-		AppURL:          os.Getenv("APP_URL"),
+		InstagramAppID:  instagramAppID,
+		InstagramSecret: instagramSecret,
+		AppURL:          appURL,
 	}
 
 	err = svc.Run(ctx)
 	if err != nil {
-		logger.Error("error running service", "error", err)
-		os.Exit(1)
+		return fmt.Errorf("error running service: %w", err)
 	}
+
+	return nil
 }
 
 func createRedisClient(ctx context.Context) (*redis.Client, error) {
