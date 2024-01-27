@@ -10,7 +10,7 @@ push: build
 # This will fail firs time because we don't yet have APP_URL.
 # Set this once cloud run has created and give us it.
 deploy: push
-	gcloud run deploy ${APP_NAME} \
+	gcloud run deploy ${REPO_NAME}-${APP_NAME} \
 	  --image ${IMAGE_TAG} \
 	  --region ${REGION} \
 	  --project=${PROJECT_ID} \
